@@ -1,3 +1,7 @@
+import smtplib
+from email.mime.text import MIMEText
+
+
 def parse_students_from_file(file_path):
     result = {}
     data_lines = open(file_path).readlines()
@@ -76,7 +80,26 @@ def delete_student(students_dict):
 
 
 def mail_all_students(students_dict):
-    return ""
+    for key in students_dict:
+        if students_dict[key]["mailed"]:
+            subject = "Marks"
+            body = f'Your mark is {students_dict[key]["grade"]}'
+            sender = "pythongrader123@gmail.com"
+            password = "Pythontest123"
+            recipients = [key]
+
+            send_email(subject, body, sender, recipients, password)
+
+
+def send_email(subject, body, sender, recipients, password):
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = ', '.join(recipients)
+    smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    smtp_server.login(sender, password)
+    smtp_server.sendmail(sender, recipients, msg.as_string())
+    smtp_server.quit()
 
 
 data_set_path = "dataSets/studentsData.txt"
