@@ -13,13 +13,27 @@ class LinkedList:
         nodes.append("None")
         return " -> ".join(nodes)
 
-    def add(self, node):
+    def append(self, e, func=None):
         if self.head is None:
-            self.head = node
-            self.tail = node
+            self.head = Node(e)
+            self.tail = self.head
+            return
+
+        if func is None:
+            current = self.head
+            while current.nextE is not None and current.nextE.data <= e:
+                current = current.nextE
+            next = current.nextE
+            current.nextE = Node(e)
+            current.nextE.nextE = next
         else:
-            self.tail.nextE = node
-            self.tail = node
+            current = self.head
+            while current.nextE is not None and func(current.nextE.data, e):
+                current = current.nextE
+            next = current.nextE
+            current.nextE = Node(e)
+            current.nextE.nextE = next
+
         self.size += 1
 
     def get(self, e):
@@ -28,7 +42,7 @@ class LinkedList:
             node = node.nextE
         return node
 
-    def __delete__(self, e):
+    def delete(self, e):
         if e is self.head.data:
             self.head = self.head.nextE
             return
@@ -47,3 +61,11 @@ class Node:
     def __repr__(self):
         return self.data
 
+
+test = LinkedList()
+test.append("asd1")
+test.append("asasdd2")
+test.append("asdd3")
+test.append("asd4")
+
+print(test)
