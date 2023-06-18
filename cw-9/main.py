@@ -1,4 +1,5 @@
 import wikipediaapi
+from collections import Counter
 
 
 def get_article(title):
@@ -16,7 +17,24 @@ def read_titles(filename):
             yield line.strip()
 
 
+def count_char_occurrences(title):
+    article_content = get_article(title)
+    return dict(Counter(char.upper() for char in article_content if char.isalpha()))
+
+
 title_generator = read_titles("small.txt")
-content = get_article(next(title_generator))
-distinct_letters = list({char.upper() for char in set(content) if char.isalpha()})
-print(distinct_letters)
+all_characters_count = {}
+
+for article_title in title_generator:
+    char_occurrences = count_char_occurrences(article_title)
+    for key in char_occurrences:
+        all_characters_count.setdefault(key, {"occurrences": 0, "articles": 0})
+        all_characters_count[key]["articles"] += 1
+        all_characters_count[key]["occurrences"] += char_occurrences[key]
+
+character_per_article = {
+    key: all_characters_count[key]["occurrences"] / all_characters_count[key]["articles"]
+    for key in all_characters_count
+}
+
+print(character_per_article)
