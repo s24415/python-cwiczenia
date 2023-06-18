@@ -62,10 +62,10 @@ class Node:
         return self.data
 
 
-test = LinkedList()
-test.append("asd1")
-test.append("asasdd2")
-test.append("asdd3")
-test.append("asd4")
+exemplary_list = LinkedList()
+exemplary_list.append("Ala")
+exemplary_list.append("ma")
+exemplary_list.append("kota")
 
-print(test)
+print(exemplary_list)
+
